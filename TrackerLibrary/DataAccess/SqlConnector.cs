@@ -12,7 +12,7 @@ namespace TrackerLibrary.DataAccess
 {
     class SqlConnector : IDataConnection
     {
-        // TODO- Make the Create Prize method actually save to database
+   
         /// <summary>
         /// Saves a new prize to the database
         /// </summary>
@@ -20,8 +20,8 @@ namespace TrackerLibrary.DataAccess
         /// <returns>The prize information, including identifier</returns>
         public PrizeModel CreatePrize(PrizeModel model)
         {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(
-                GlobalConfig.CnnString("Tournaments")))
+            //using statement for destroying connection completely after model is returned, prevents memmory leaks!
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
             {
                 var prize = new DynamicParameters();
                 prize.Add("@PlaceNumber", model.PlaceNumber);
