@@ -13,7 +13,30 @@ namespace TrackerLibrary.DataAccess
 {
     class SqlConnector : IDataConnection
     {
-   
+        public MatchupModel CreateMatchup(MatchupModel matchup)
+        {
+            throw new NotImplementedException();
+            ///using statement for complete garabage collection after method is run
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+                
+        }
+
+        public MatchupEntryModel CreateMatchupEntry(MatchupEntryModel matchupEntry)
+        {
+            throw new NotImplementedException();
+            ///using statement for complete garabage collection after method is run
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+                
+        }
+
+        public PersonModel CreatePerson(PersonModel person)
+        {
+            throw new NotImplementedException();
+            ///using statement for complete garabage collection after method is run
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+           
+        }
+
         /// <summary>
         /// Saves a new prize to the database
         /// </summary>
@@ -21,7 +44,7 @@ namespace TrackerLibrary.DataAccess
         /// <returns>The prize information, including identifier</returns>
         public PrizeModel CreatePrize(PrizeModel model)
         {
-            //using statement for destroying connection completely after model is returned, prevents memmory leaks!
+            ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
             {
                 var prize = new DynamicParameters();
@@ -38,6 +61,22 @@ namespace TrackerLibrary.DataAccess
                 return model;
             }
 
+        }
+
+        public TeamModel CreateTeam(TeamModel team)
+        {
+            throw new NotImplementedException();
+            ///using statement for complete garabage collection after method is run
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+        
+        }
+
+        public TournamentModel CreateTournament(TournamentModel tournament)
+        {
+            throw new NotImplementedException();
+            ///using statement for complete garabage collection after method is run
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+                
         }
     }
 }
