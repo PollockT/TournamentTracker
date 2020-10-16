@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TrackerLibrary.DataAccess.TextHelpers;
 using TrackerLibrary.Model;
 
 
@@ -31,7 +32,7 @@ namespace TrackerLibrary.DataAccess
                 prize.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 connection.Execute("dbo.spPrizes_Insert", prize, commandType: CommandType.StoredProcedure);
-
+                
                 model.Id = prize.Get<int>("@id");
 
                 return model;

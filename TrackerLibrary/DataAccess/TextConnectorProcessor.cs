@@ -65,6 +65,7 @@ namespace TrackerLibrary.DataAccess.TextHelpers
                 string[] cols = line.Split(',');
 
                 PrizeModel prize = new PrizeModel();
+
                 prize.Id = int.Parse(cols[0]);
                 prize.PlaceName = (cols[1]); 
                 prize.PlaceNumber = int.Parse(cols[2]); // may need to flip placeNumber and Name
@@ -77,7 +78,16 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
         public static void SaveToPrizeFile(this List<PrizeModel> models, string fileName)
         {
+            List<string> lines = new List<string>();
+            {
+                foreach(PrizeModel prize in models)
+                {
+                    lines.Add($"{prize.Id},{prize.PlaceName},{prize.PlaceNumber}," +
+                        $"{prize.PrizeAmount},{prize.PrizePercentage}");
+                }
 
+                File.WriteAllLines(fileName.FullFilePath(), lines);
+            }
         }
     }
 }
