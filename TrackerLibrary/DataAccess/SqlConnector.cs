@@ -18,6 +18,9 @@ namespace TrackerLibrary.DataAccess
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+            {
+            
+            }
                 
         }
 
@@ -26,7 +29,9 @@ namespace TrackerLibrary.DataAccess
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
-                
+            {
+
+            }    
         }
 
         public PersonModel CreatePerson(PersonModel person)
@@ -34,7 +39,9 @@ namespace TrackerLibrary.DataAccess
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
-           
+            {
+
+            }
         }
 
         /// <summary>
@@ -68,7 +75,9 @@ namespace TrackerLibrary.DataAccess
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
-        
+            {
+
+            }
         }
 
         public TournamentModel CreateTournament(TournamentModel tournament)
@@ -76,7 +85,9 @@ namespace TrackerLibrary.DataAccess
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
-                
+            {
+
+            }    
         }
     }
 }
