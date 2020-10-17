@@ -34,13 +34,20 @@ namespace TrackerLibrary.DataAccess
             }    
         }
 
-        public PersonModel CreatePerson(PersonModel person)
-        {
-            throw new NotImplementedException();
+        public PersonModel CreatePerson(PersonModel model)
+        {           
             ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
             {
+                var person = new DynamicParameters();
+                person.Add("@", model.FirstName);
+                person.Add("@", model.LastName);
+                person.Add("@", model.EmailAddress);
+                person.Add("@", model.CellPhoneNumber);
 
+                connection.Execute("dbo.spPeople_Insert", person, commandType: CommandType.StoredProcedure);
+
+                return model;
             }
         }
 
