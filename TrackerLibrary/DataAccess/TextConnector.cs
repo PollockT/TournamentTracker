@@ -10,13 +10,13 @@ namespace TrackerLibrary.DataAccess
 {
     public class TextConnector : IDataConnection
     {
-        private const string PrizesFile = "PrizeModels.csv";
-        private const string PersonsFile = "PersonModels.csv";
-        private const string TeamsFile = "TeamModels.csv";
-        private const string MatchupsFile = "MatchupModels.csv";
-        private const string MatchupEntriesFile = "MatchupEntryModels.csv";
-        private const string TournamentsFiles = "TournamentModels.csv";
-
+        private const string PRIZEFILE = "PrizeModels.csv";
+        private const string PERSONFILE = "PersonModels.csv";
+        private const string TEAMFILE = "TeamModels.csv";
+        private const string MATCHUPFILE = "MatchupModels.csv";
+        private const string MATCHUPENTRYFILE = "MatchupEntryModels.csv";
+        private const string TOURNAMENTFILE = "TournamentModels.csv";
+        
         public MatchupModel CreateMatchup(MatchupModel matchup)
         {
             throw new NotImplementedException();
@@ -26,18 +26,38 @@ namespace TrackerLibrary.DataAccess
         {
             throw new NotImplementedException();
         }
-
-        public PersonModel CreatePerson(PersonModel person)
+        
+        /// <summary>
+        /// Creates Person model to be written to PresonModel.csv, both creating and updating
+        /// </summary>
+        /// <param name="model">Person model information</param>
+        /// <returns></returns>
+        public PersonModel CreatePerson(PersonModel model)
         {
-            throw new NotImplementedException();
+            List<PersonModel> person = PERSONFILE.FullFilePath().LoadFile().ConvertToPersonModels();
+
+            int currentId = 1;
+
+            if(person.Count > 0)
+            {
+                currentId = person.OrderByDescending(x => x.Id).First().Id + 1;
+            }
+            model.Id = currentId;
+            person.Add(model);
+
+            person.SaveToPersonsFile(PERSONFILE);
+
+            return model;
         }
 
-        
+        /// <summary>
+        /// Creates Prize model to be written to PrizeModel.csv, both creating and updating
+        /// </summary>
+        /// <param name="model">Prize Model information</param>
+        /// <returns></returns>
         public PrizeModel CreatePrize(PrizeModel model)
         {
-            ///Load text file and convert the text to List<PrizeModel>
-            ///<param name="model"/> translated over from one line of prizes </param>
-            List<PrizeModel> prizes = PrizesFile.FullFilePath().LoadFile().ConvertToPrizeModels();
+            List<PrizeModel> prizes = PRIZEFILE.FullFilePath().LoadFile().ConvertToPrizeModels();
 
             ///Finds the id of the highest Id, and then adds 1 to make the new current Id
             int currentId = 1;
@@ -50,11 +70,12 @@ namespace TrackerLibrary.DataAccess
             prizes.Add(model);
 
             ///convert the prizes to list<string> save the list<string> to the text file
-            prizes.SaveToPrizeFile(PrizesFile);
+            prizes.SaveToPrizeFile(PRIZEFILE);
 
             return model;
         }
 
+        
         public TeamModel CreateTeam(TeamModel team)
         {
             throw new NotImplementedException();

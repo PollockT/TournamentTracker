@@ -7,12 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TrackerLibrary.DataAccess.TextHelpers;
 using TrackerLibrary.Model;
-
+using System.Data.SqlClient;
 
 namespace TrackerLibrary.DataAccess
 {
     class SqlConnector : IDataConnection
     {
+        /*
         public MatchupModel CreateMatchup(MatchupModel matchup)
         {
             throw new NotImplementedException();
@@ -33,19 +34,27 @@ namespace TrackerLibrary.DataAccess
 
             }    
         }
-
+        */
+        /// <summary>
+        /// Saves to people table
+        /// </summary>
+        /// <param name="model">saves information to people records</param>
+        /// <returns></returns>
         public PersonModel CreatePerson(PersonModel model)
         {           
             ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
             {
                 var person = new DynamicParameters();
-                person.Add("@", model.FirstName);
-                person.Add("@", model.LastName);
-                person.Add("@", model.EmailAddress);
-                person.Add("@", model.CellPhoneNumber);
-
+                person.Add("@FirstName", model.FirstName);
+                person.Add("@LastName", model.LastName);
+                person.Add("@EmailAddress", model.EmailAddress);
+                person.Add("@CellphoneNumber", model.CellphoneNumber);
+                person.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+                                              
                 connection.Execute("dbo.spPeople_Insert", person, commandType: CommandType.StoredProcedure);
+
+                model.Id = person.Get<int>("@id");
 
                 return model;
             }
@@ -77,6 +86,7 @@ namespace TrackerLibrary.DataAccess
 
         }
 
+        /*
         public TeamModel CreateTeam(TeamModel team)
         {
             throw new NotImplementedException();
@@ -95,6 +105,6 @@ namespace TrackerLibrary.DataAccess
             {
 
             }    
-        }
+        }*/
     }
 }

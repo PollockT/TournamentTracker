@@ -12,12 +12,6 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 {
     public static class TextConnectorProcessor
     {
-        // *load text file
-        // *convert to list<PrizeModel>
-        // find the max Id
-        // add the new record with the new Id(max + 1)
-        // convert the prizes to list<string>
-        // save the list<string> to the text file
 
         /// <summary>
         /// Directs application to the location of where the file should be
@@ -48,10 +42,10 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
         //////////////////////PRIZE MODEL FILE CSV//////////////////////////////////
         /// <summary>
-        /// seperates every line with a comma as the delimitor and puts the array of items into
-        /// a string called cols. Builds the array of PrizeModel
+        /// Converts attributes to text form so it can be written into an array and then 
+        /// columns are seperated with a ','!!!
         /// </summary>
-        /// <param name="lines">array of cols split by a comma</param>
+        /// <param name="lines">Each array or record of Prize</param>
         /// <returns></returns>
         public static List<PrizeModel> ConvertToPrizeModels(this List<string> lines)
         {
@@ -62,19 +56,19 @@ namespace TrackerLibrary.DataAccess.TextHelpers
                 string[] cols = line.Split(',');
 
                 PrizeModel prize = new PrizeModel();
-
                 prize.Id = int.Parse(cols[0]);
                 prize.PlaceName = (cols[1]); 
-                prize.PlaceNumber = int.Parse(cols[2]); // may need to flip placeNumber and Name
+                prize.PlaceNumber = int.Parse(cols[2]); 
                 prize.PrizeAmount = decimal.Parse(cols[3]);
                 prize.PrizePercentage = double.Parse(cols[4]);
+
                 output.Add(prize);
             }
             return output;
         }
 
         /// <summary>
-        /// Saves model to PrizeModels.csv
+        /// Array of the PrizeModel is written to the PrizeModel.csv file.
         /// </summary>
         /// <param name="models">The prize information stored in memory(Id, PlaceName, PlaceNumber,
         /// PrizeAmount, PrizePercentage)</param>
@@ -95,18 +89,49 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
 
         //////////////////////PERSON MODEL FILE CSV/////////////////////////////////
+        
 
-
-
+        /// <summary>
+        /// Converts Id to a text, and then the rest of the list for Person attributes are
+        /// left as text in the array as PersonModel
+        /// </summary>
+        /// <param name="lines">Each array or record of a person</param>
+        /// <returns></returns>
         public static List<PersonModel> ConvertToPersonModels(this List<string> lines)
         {
-            throw new NotImplementedException();
+            List<PersonModel> output = new List<PersonModel>();
+
+            foreach(string line in lines)
+            {
+                string[] cols = line.Split(',');
+
+                PersonModel person = new PersonModel();
+                person.Id = int.Parse(cols[0]);
+                person.FirstName = cols[1];
+                person.LastName = cols[2];
+                person.EmailAddress = cols[3];
+                person.CellphoneNumber = cols[4];
+
+                output.Add(person);
+            }
+            return output;
         }
 
+        /// <summary>
+        /// Array of PersonModel.csv
+        /// </summary>
+        /// <param name="models">Person model information columns in list form</param>
+        /// <param name="fileName">PersonModel.csv that contains PersonModel</param>
         public static void SaveToPersonsFile(this List<PersonModel> models, string fileName)
         {
-            throw new NotImplementedException();
+            List<string> lines = new List<string>();
 
+            foreach(PersonModel person in models)
+            {
+                lines.Add($"{ person.Id },{ person.FirstName },{ person.LastName },{ person.EmailAddress }," +
+                    $"{ person.CellphoneNumber }");
+            }
+            File.WriteAllLines(fileName.FullFilePath(), lines);
         }
 
         //////////////////////TEAM MODEL FILE CSV///////////////////////////////////
@@ -157,6 +182,6 @@ namespace TrackerLibrary.DataAccess.TextHelpers
         {
             throw new NotImplementedException();
         }
-
+        
     }
 }
