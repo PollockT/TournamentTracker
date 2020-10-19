@@ -8,17 +8,20 @@ using System.Threading.Tasks;
 using TrackerLibrary.DataAccess.TextHelpers;
 using TrackerLibrary.Model;
 using System.Data.SqlClient;
+using System.Xml;
 
 namespace TrackerLibrary.DataAccess
 {
     class SqlConnector : IDataConnection
     {
-        /*
+
+        private const string DB = "Tournaments";
+
         public MatchupModel CreateMatchup(MatchupModel matchup)
         {
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
             {
             
             }
@@ -29,12 +32,12 @@ namespace TrackerLibrary.DataAccess
         {
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
             {
 
             }    
         }
-        */
+        
         /// <summary>
         /// Saves to people table
         /// </summary>
@@ -43,7 +46,7 @@ namespace TrackerLibrary.DataAccess
         public PersonModel CreatePerson(PersonModel model)
         {           
             ///using statement for complete garabage collection after method is run
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
             {
                 var person = new DynamicParameters();
                 person.Add("@FirstName", model.FirstName);
@@ -68,7 +71,7 @@ namespace TrackerLibrary.DataAccess
         public PrizeModel CreatePrize(PrizeModel model)
         {
             ///using statement for complete garabage collection after method is run
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
             {
                 var prize = new DynamicParameters();
                 prize.Add("@PlaceNumber", model.PlaceNumber);
@@ -86,12 +89,27 @@ namespace TrackerLibrary.DataAccess
 
         }
 
-        /*
+        /// <summary>
+        /// Calls stored procedure in MSSQL dbo.spPeople_GetAll
+        /// </summary>
+        /// <returns>list of all records in dbo.People table</returns>
+        public List<PersonModel> GetPerson_All()
+        {
+            List<PersonModel> output;
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
+            {
+                output = connection.Query<PersonModel>("dbo.spPeople_GetAll").ToList();
+            }
+
+            return output;
+        }
+
+        
         public TeamModel CreateTeam(TeamModel team)
         {
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
             {
 
             }
@@ -101,10 +119,10 @@ namespace TrackerLibrary.DataAccess
         {
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
             {
 
             }    
-        }*/
+        }
     }
 }
