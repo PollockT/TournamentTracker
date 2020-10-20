@@ -17,7 +17,7 @@ namespace TrackerLibrary.DataAccess
 
         private const string DB = "Tournaments";
 
-        public MatchupModel CreateMatchup(MatchupModel matchup)
+        public MatchupModel CreateMatchup(MatchupModel matchupModel)
         {
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
@@ -28,7 +28,7 @@ namespace TrackerLibrary.DataAccess
                 
         }
 
-        public MatchupEntryModel CreateMatchupEntry(MatchupEntryModel matchupEntry)
+        public MatchupEntryModel CreateMatchupEntry(MatchupEntryModel matchupEntryModel)
         {
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
@@ -43,23 +43,23 @@ namespace TrackerLibrary.DataAccess
         /// </summary>
         /// <param name="model">saves information to people records</param>
         /// <returns></returns>
-        public PersonModel CreatePerson(PersonModel model)
+        public PersonModel CreatePerson(PersonModel personModel)
         {           
             ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
             {
                 var person = new DynamicParameters();
-                person.Add("@FirstName", model.FirstName);
-                person.Add("@LastName", model.LastName);
-                person.Add("@EmailAddress", model.EmailAddress);
-                person.Add("@CellphoneNumber", model.CellphoneNumber);
+                person.Add("@FirstName", personModel.FirstName);
+                person.Add("@LastName", personModel.LastName);
+                person.Add("@EmailAddress", personModel.EmailAddress);
+                person.Add("@CellphoneNumber", personModel.CellphoneNumber);
                 person.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
                                               
                 connection.Execute("dbo.spPeople_Insert", person, commandType: CommandType.StoredProcedure);
 
-                model.Id = person.Get<int>("@id");
+                personModel.Id = person.Get<int>("@id");
 
-                return model;
+                return personModel;
             }
         }
 
@@ -68,23 +68,23 @@ namespace TrackerLibrary.DataAccess
         /// </summary>
         /// <param name="model"> the prize's information</param>
         /// <returns>The prize information, including identifier</returns>
-        public PrizeModel CreatePrize(PrizeModel model)
+        public PrizeModel CreatePrize(PrizeModel prizeModel)
         {
             ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
             {
                 var prize = new DynamicParameters();
-                prize.Add("@PlaceNumber", model.PlaceNumber);
-                prize.Add("@PlaceName", model.PlaceName);
-                prize.Add("@PrizeAmount", model.PrizeAmount);
-                prize.Add("@PrizePercentage", model.PrizePercentage);
+                prize.Add("@PlaceNumber", prizeModel.PlaceNumber);
+                prize.Add("@PlaceName", prizeModel.PlaceName);
+                prize.Add("@PrizeAmount", prizeModel.PrizeAmount);
+                prize.Add("@PrizePercentage", prizeModel.PrizePercentage);
                 prize.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 connection.Execute("dbo.spPrizes_Insert", prize, commandType: CommandType.StoredProcedure);
-                
-                model.Id = prize.Get<int>("@id");
 
-                return model;
+                prizeModel.Id = prize.Get<int>("@id");
+
+                return prizeModel;
             }
 
         }
@@ -105,17 +105,17 @@ namespace TrackerLibrary.DataAccess
         }
 
         
-        public TeamModel CreateTeam(TeamModel team)
+        public TeamModel CreateTeam(TeamModel teamModel)
         {
-            throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
             {
-
+                var team = new DynamicParameters();
+                team.
             }
         }
 
-        public TournamentModel CreateTournament(TournamentModel tournament)
+        public TournamentModel CreateTournament(TournamentModel tournamentModel)
         {
             throw new NotImplementedException();
             ///using statement for complete garabage collection after method is run

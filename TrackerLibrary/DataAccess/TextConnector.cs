@@ -16,13 +16,13 @@ namespace TrackerLibrary.DataAccess
         private const string MATCHUPFILE = "MatchupModels.csv";
         private const string MATCHUPENTRYFILE = "MatchupEntryModels.csv";
         private const string TOURNAMENTFILE = "TournamentModels.csv";
-                
+
         /// <summary>
         /// Creates Person model to be written to PresonModel.csv, both creating and updating
         /// </summary>
-        /// <param name="model">Person model information</param>
+        /// <param name="personModel">Person model information</param>
         /// <returns></returns>
-        public PersonModel CreatePerson(PersonModel model)
+        public PersonModel CreatePerson(PersonModel personModel)
         {
             List<PersonModel> person = PERSONFILE.FullFilePath().LoadFile().ConvertToPersonModels();
 
@@ -32,20 +32,20 @@ namespace TrackerLibrary.DataAccess
             {
                 currentId = person.OrderByDescending(x => x.Id).First().Id + 1;
             }
-            model.Id = currentId;
-            person.Add(model);
+            personModel.Id = currentId;
+            person.Add(personModel);
 
             person.SaveToPersonsFile(PERSONFILE);
 
-            return model;
+            return personModel;
         }
 
         /// <summary>
         /// Creates Prize model to be written to PrizeModel.csv, both creating and updating
         /// </summary>
-        /// <param name="model">Prize Model information</param>
+        /// <param name="prizeModel">Prize Model information</param>
         /// <returns></returns>
-        public PrizeModel CreatePrize(PrizeModel model)
+        public PrizeModel CreatePrize(PrizeModel prizeModel)
         {
             List<PrizeModel> prizes = PRIZEFILE.FullFilePath().LoadFile().ConvertToPrizeModels();
 
@@ -56,13 +56,18 @@ namespace TrackerLibrary.DataAccess
             {
                 currentId = prizes.OrderByDescending(x => x.Id).First().Id + 1;
             }
-            model.Id = currentId;
-            prizes.Add(model);
+            prizeModel.Id = currentId;
+            prizes.Add(prizeModel);
 
             ///convert the prizes to list<string> save the list<string> to the text file
             prizes.SaveToPrizeFile(PRIZEFILE);
 
-            return model;
+            return prizeModel;
+        }
+
+        public TeamModel CreateTeam(TeamModel teamModel)
+        {
+            throw new NotImplementedException();
         }
 
         public List<PersonModel> GetPerson_All()
