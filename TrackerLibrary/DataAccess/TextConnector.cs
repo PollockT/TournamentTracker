@@ -16,17 +16,7 @@ namespace TrackerLibrary.DataAccess
         private const string MATCHUPFILE = "MatchupModels.csv";
         private const string MATCHUPENTRYFILE = "MatchupEntryModels.csv";
         private const string TOURNAMENTFILE = "TournamentModels.csv";
-        
-        public MatchupModel CreateMatchup(MatchupModel matchup)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MatchupEntryModel CreateMatchupEntry(MatchupEntryModel matchupEntry)
-        {
-            throw new NotImplementedException();
-        }
-        
+                
         /// <summary>
         /// Creates Person model to be written to PresonModel.csv, both creating and updating
         /// </summary>
@@ -75,20 +65,9 @@ namespace TrackerLibrary.DataAccess
             return model;
         }
 
-        
-        public TeamModel CreateTeam(TeamModel team)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TournamentModel CreateTournament(TournamentModel tournament)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<PersonModel> GetPerson_All()
         {
-            throw new NotImplementedException();
+            return PERSONFILE.FullFilePath().LoadFile().ConvertToPersonModels();
         }
     }
 }
