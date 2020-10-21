@@ -136,14 +136,54 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
         //////////////////////TEAM MODEL FILE CSV///////////////////////////////////
 
-        public static List<TeamModel> ConvertToTeamModels(this List<string> lines)
+        public static List<TeamModel> ConvertToTeamModels(this List<string> lines, string peopleFileName)
         {
-            throw new NotImplementedException();
+            //id,team name, list of ids seperated by pipe
+            //3,Team 1, 1|3|5
+
+            List<TeamModel> output = new List<TeamModel>();
+            List<PersonModel> people = peopleFileName.FullFilePath().LoadFile().ConvertToPersonModels();
+            foreach(string line in lines)
+            {
+                string[] cols = line.Split(',');
+
+                TeamModel t = new TeamModel();
+                t.Id = int.Parse(cols[0]);
+                t.TeamName = cols[1];
+
+                string[] personIds = cols[2].Split('|');
+
+                foreach(string id in personIds)
+                {
+                    t.TeamMembers.Add(people.Where(x => x.Id == int.Parse(id)).First());
+                }
+            }
+            return output;
         }
 
         public static void SaveToTeamsFile(this List<TeamModel> models, string fileName)
         {
-            throw new NotImplementedException();
+            List<string> lines = new List<string>();
+
+            foreach ( TeamModel team in models)
+            {
+                
+            }
+        }
+
+        private static string ConvertPeopleListToString(List<PersonModel> people)
+        {
+            string output = "";
+
+            foreach (PersonModel person in people)
+            {
+                output += $"{ person.Id }|";
+            }
+
+            // keeps | from showing up on last record
+            output = output.Substring(0, output.Length - 1);
+
+            return output;
         }
 
         //////////////////////MATCHUP MODEL FILE CSV////////////////////////////////

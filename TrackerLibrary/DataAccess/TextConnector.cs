@@ -67,7 +67,19 @@ namespace TrackerLibrary.DataAccess
 
         public TeamModel CreateTeam(TeamModel teamModel)
         {
-            throw new NotImplementedException();
+            List<TeamModel> teams = TEAMFILE.FullFilePath().LoadFile().ConvertToTeamModels(PERSONFILE);
+
+            // Find max id
+            int currentId = 1;
+
+            if(teams.Count > 0)
+            {
+                currentId = teams.OrderByDescending(x => x.Id).First().Id + 1;
+            }
+
+            teamModel.Id = currentId;
+            teams.Add(teamModel);
+            teams.SaveToTeamsFile(TEAMFILE);
         }
 
         public List<PersonModel> GetPerson_All()

@@ -111,7 +111,22 @@ namespace TrackerLibrary.DataAccess
             using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
             {
                 var team = new DynamicParameters();
-                team.
+                team.Add("@TeamName", teamModel.TeamName);
+                team.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                connection.Execute("dbo.spTeam_Insert", team, commandType: CommandType.StoredProcedure);
+                
+                teamModel.Id = team.Get<int>("@id");
+
+                foreach(PersonModel personModel in teamModel.TeamMembers)
+                {
+                    team = new DynamicParameters();
+                    team.Add("@TeamId", teamModel.Id);
+                    team.Add("@PersonId", personModel.Id);
+
+                    connection.Execute("dbo.spTeamMembers_Insert", team, commandType: CommandType.StoredProcedure);
+                }
+                return teamModel;
             }
         }
 
