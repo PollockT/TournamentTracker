@@ -136,6 +136,12 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
         //////////////////////TEAM MODEL FILE CSV///////////////////////////////////
 
+        /// <summary>
+        /// builds the file structure for data to be positioned in
+        /// </summary>
+        /// <param name="lines">full list of team model attributes</param>
+        /// <param name="peopleFileName">the file name that will be modified to</param>
+        /// <returns></returns>
         public static List<TeamModel> ConvertToTeamModels(this List<string> lines, string peopleFileName)
         {
             //id,team name, list of ids seperated by pipe
@@ -161,19 +167,36 @@ namespace TrackerLibrary.DataAccess.TextHelpers
             return output;
         }
 
+        /// <summary>
+        /// creates array of team members to be saved to file TeamModel.csv
+        /// </summary>
+        /// <param name="models">Team model id, name, and ids of peopel in team</param>
+        /// <param name="fileName">TeamModel.csv created and added to</param>
         public static void SaveToTeamsFile(this List<TeamModel> models, string fileName)
         {
             List<string> lines = new List<string>();
 
-            foreach ( TeamModel team in models)
+            foreach (TeamModel team in models)
             {
-                
+                lines.Add($" {team.Id },{ team.TeamName }," +
+                    $"{ ConvertPeopleListToString(team.TeamMembers) } ");
             }
+
+            File.WriteAllLines(fileName.FullFilePath(), lines);
         }
 
+        /// <summary>
+        /// Grabs people's saved Id's and creates them to a list to add to team
+        /// </summary>
+        /// <param name="people">PersonModel Id attribute</param>
+        /// <returns>returns a list array of attributes found</returns>
         private static string ConvertPeopleListToString(List<PersonModel> people)
         {
             string output = "";
+
+            if(people.Count() == 0){
+                return "";
+            }
 
             foreach (PersonModel person in people)
             {

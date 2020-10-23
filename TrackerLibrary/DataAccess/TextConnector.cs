@@ -65,6 +65,12 @@ namespace TrackerLibrary.DataAccess
             return prizeModel;
         }
 
+
+        /// <summary>
+        /// Creates the team file, writing in people to a team using just their Ids, not names.
+        /// </summary>
+        /// <param name="teamModel">the team members</param>
+        /// <returns></returns>
         public TeamModel CreateTeam(TeamModel teamModel)
         {
             List<TeamModel> teams = TEAMFILE.FullFilePath().LoadFile().ConvertToTeamModels(PERSONFILE);
@@ -80,8 +86,16 @@ namespace TrackerLibrary.DataAccess
             teamModel.Id = currentId;
             teams.Add(teamModel);
             teams.SaveToTeamsFile(TEAMFILE);
+
+            return teamModel;
         }
 
+
+        /// <summary>
+        /// Calls the text file if exsists and gets all the people for their 
+        /// Ids to turn into a list
+        /// </summary>
+        /// <returns>returns all Ids in combonination with other method</returns>
         public List<PersonModel> GetPerson_All()
         {
             return PERSONFILE.FullFilePath().LoadFile().ConvertToPersonModels();
