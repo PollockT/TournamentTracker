@@ -16,7 +16,10 @@ namespace TrackerLibrary
         public static IDataConnection Connection { get; private set; }
 
 
-
+        /// <summary>
+        /// creates a value to input on program.cs to control database interaction
+        /// </summary>
+        /// <param name="db">The Database</param>
         public static void InitializeConnections(DatabaseType db)
         {
             
@@ -35,6 +38,11 @@ namespace TrackerLibrary
             }
         }
 
+        /// <summary>
+        /// Shortcut to creating connection string
+        /// </summary>
+        /// <param name="name">ConnectionString</param>
+        /// <returns></returns>
         public static string CnnString(string name)
         {
 

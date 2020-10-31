@@ -104,7 +104,11 @@ namespace TrackerLibrary.DataAccess
             return output;
         }
 
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="teamModel"></param>
+        /// <returns></returns>
         public TeamModel CreateTeam(TeamModel teamModel)
         {
             ///using statement for complete garabage collection after method is run
@@ -130,6 +134,11 @@ namespace TrackerLibrary.DataAccess
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tournamentModel"></param>
+        /// <returns></returns>
         public TournamentModel CreateTournament(TournamentModel tournamentModel)
         {
             throw new NotImplementedException();
@@ -138,6 +147,30 @@ namespace TrackerLibrary.DataAccess
             {
 
             }    
+        }
+
+        /// <summary>
+        /// For each Team, the foreach query is run until it selects all people per team, then moves on to next team
+        /// </summary>
+        /// <returns>All Teams with connected team members inside</returns>
+        public List<TeamModel> GetTeam_All()
+        {
+            List<TeamModel> output;
+
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
+            {
+                output = connection.Query<TeamModel>("dbo.spTeam_GetAll").ToList();
+                
+                
+                foreach(TeamModel team in output)
+                {
+                    var person = new DynamicParameters();
+                    person.Add("@TeamId", team.Id);
+                    team.TeamMembers = connection.Query<PersonModel>("dbo.spTeamMembers_GetByTeam",person,commandType:CommandType.StoredProcedure).ToList();
+                }
+            }
+
+            return output;
         }
     }
 }

@@ -92,13 +92,17 @@ namespace TrackerLibrary.DataAccess
 
 
         /// <summary>
-        /// Calls the text file if exsists and gets all the people for their 
-        /// Ids to turn into a list
+        /// Calls the text file if exsists and gets all records
         /// </summary>
-        /// <returns>returns all Ids in combonination with other method</returns>
+        /// <returns>returns file with records</returns>
         public List<PersonModel> GetPerson_All()
         {
             return PERSONFILE.FullFilePath().LoadFile().ConvertToPersonModels();
+        }
+
+        public List<TeamModel> GetTeam_All()
+        {
+            throw new NotImplementedException();
         }
     }
 }
