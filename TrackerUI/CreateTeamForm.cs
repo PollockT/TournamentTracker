@@ -18,10 +18,13 @@ namespace TrackerUI
         private List<PersonModel> availableTeamMembers = GlobalConfig.Connection.GetPerson_All();
         private List<PersonModel> selectedTeamMembers = new List<PersonModel>();
         private int ListBoxCount = 0;
-        public CreateTeamForm()
+        private ITeamRequester callingForm;
+
+        public CreateTeamForm(ITeamRequester caller)
         {
             InitializeComponent();
 
+            callingForm = caller;
             //CreateSampleData();
 
             WireUpLists();
@@ -183,24 +186,17 @@ namespace TrackerUI
 
             GlobalConfig.Connection.CreateTeam(team);
 
-            //TODO - clean up form if it's not closed, reset
+            callingForm.TeamComplete(team);
 
-            ResetMemberForm();
-            teamNameValue.Text = "";
+            this.Close();
 
-            for (int i = 0; i <= ListBoxCount; i++)
-            {
-                teamMembersListBox.SetSelected(0, true);
-                ResetingBox();
-                teamMembersListBox.SetSelected(0, true);
-            }
-            teamMembersListBox.SetSelected(0, true);
-            ResetingBox();
+
+
+           
+            
+            
         }
-        private void ResetingBox()
-        {
-            removeSelectedButton_Click(new object(), new EventArgs());
-        }
+       
     }
 }
 

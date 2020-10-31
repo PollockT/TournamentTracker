@@ -14,36 +14,46 @@ namespace TrackerUI
 {
     public partial class CreatePrizeForm : Form
     {
-        public CreatePrizeForm()
+        IPrizeRequester callingForm;
+
+        public CreatePrizeForm(IPrizeRequester caller)
         {
             InitializeComponent();
+            callingForm = caller;
         }
-
+        
+       
         private void createPrizeButton_Click(object sender, EventArgs e)
         {
             if (ValidateForm())
             {
-                PrizeModel model = new PrizeModel(
-                    placeNameValue.Text,
+                PrizeModel prizeModel = new PrizeModel(                    
                     placeNumberValue.Text,
+                    placeNameValue.Text,
                     prizeAmountValue.Text,
                     prizePercentageValue.Text);
 
 
-                GlobalConfig.Connection.CreatePrize(model);
-                
-                placeNameValue.Text = "";
-                placeNumberValue.Text = "";
-                prizeAmountValue.Text = "0";
-                prizePercentageValue.Text = "0";
+                prizeModel = GlobalConfig.Connection.CreatePrize(prizeModel);
 
+                callingForm.PrizeComplete(prizeModel);
 
+                this.Close();
+                // prizeModelReset();
             }
             else
             {
                 MessageBox.Show("This form has invalid information." +
                     " Please check the values entered!");
             }
+        }
+
+        private void prizeModelReset()
+        {
+            placeNumberValue.Text = "";
+            placeNameValue.Text = "";            
+            prizeAmountValue.Text = "0";
+            prizePercentageValue.Text = "0";
         }
 
         private bool ValidateForm()
