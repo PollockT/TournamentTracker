@@ -8,6 +8,9 @@ namespace TrackerLibrary.Model
 {
     public class MatchupModel
     {
+        /// <summary>
+        /// Unique identifier for the MatchupModel
+        /// </summary>
         public int Id { get; set; }
 
         /// <summary>

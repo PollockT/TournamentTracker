@@ -22,7 +22,11 @@ namespace TrackerUI
             callingForm = caller;
         }
         
-       
+       /// <summary>
+       /// creates prize model with data and sends it over to Globalconfig
+       /// </summary>
+       /// <param name="sender">sends prize to global config</param>
+       /// <param name="e">mouse click</param>
         private void createPrizeButton_Click(object sender, EventArgs e)
         {
             if (ValidateForm())
@@ -56,6 +60,10 @@ namespace TrackerUI
             prizePercentageValue.Text = "0";
         }
 
+        /// <summary>
+        /// Validates Prize data entries to be correct data bindings
+        /// </summary>
+        /// <returns>prize data</returns>
         private bool ValidateForm()
         {
             bool output = true;
