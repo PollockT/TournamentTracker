@@ -31,6 +31,13 @@ namespace TrackerLibrary.DataAccess
         TeamModel CreateTeam(TeamModel teamModel);
 
         /// <summary>
+        /// Creates the tournament model and passes data
+        /// </summary>
+        /// <param name="tournamentModel">The tournament record loaded from table</param>
+        /// <returns></returns>
+        TournamentModel CreateTournament(TournamentModel tournamentModel);
+
+        /// <summary>
         /// Calls Stored Procedure of [dbo].[spPeople_GetAll]
         /// </summary>
         /// <returns>All people from [dbo].[Person]</returns>

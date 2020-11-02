@@ -15,8 +15,9 @@ namespace TrackerLibrary.DataAccess
     class SqlConnector : IDataConnection
     {
 
-        private const string DB = "Tournaments";
+        private const string DB = "Tournaments"; // MAGIC STRING
 
+        //////////////////////////CREATION MODELS FOR INSERTING INTO SQL TOP///////////////////////
         public MatchupModel CreateMatchup(MatchupModel matchupModel)
         {
             throw new NotImplementedException();
@@ -86,7 +87,128 @@ namespace TrackerLibrary.DataAccess
 
                 return prizeModel;
             }
+        }
 
+        /// <summary>
+        /// creates and saves teams, then grabs people dbo and inserts into team
+        /// </summary>
+        /// <param name="teamModel"></param>
+        /// <returns></returns>
+        public TeamModel CreateTeam(TeamModel teamModel)
+        {
+            ///using statement for complete garabage collection after method is run
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
+            {
+                var team = new DynamicParameters();
+                team.Add("@TeamName", teamModel.TeamName);
+                team.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+                connection.Execute("dbo.spTeam_Insert", team, commandType: CommandType.StoredProcedure);                
+                teamModel.Id = team.Get<int>("@id");
+                foreach(PersonModel personModel in teamModel.TeamMembers)
+                {
+                    team = new DynamicParameters();
+                    team.Add("@TeamId", teamModel.Id);
+                    team.Add("@PersonId", personModel.Id);
+                    connection.Execute("dbo.spTeamMembers_Insert", team, commandType: CommandType.StoredProcedure);
+                }
+                return teamModel;
+            }
+        }
+
+        /// <summary>
+        ///  Pulls from three methods to create tournament
+        /// </summary>
+        /// <param name="tournamentModel">stores all tournament data</param>
+        /// <returns></returns>
+        public TournamentModel CreateTournament(TournamentModel tournamentModel)
+        {            
+            ///using statement for complete garabage collection after method is run
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
+            {
+                SaveTournament(connection, tournamentModel);
+                SaveTournamentEntries(connection, tournamentModel);
+                SaveTournamentPrizes(connection, tournamentModel);
+                return tournamentModel;
+            }            
+        }
+
+        //////////////////////////CREATION MODELS FOR INSERTING INTO SQL BOTTOM////////////////////
+
+        /////////////////////////SAVING METHODS FOR INSERTING INTO MODELS TOP//////////////////////
+
+
+        /// <summary>
+        ///  CONNECTION TO CREATE TOURNAMENT METHOD
+        /// </summary>
+        /// <param name="connection">interface to sql connection</param>
+        /// <param name="tournamentModel">grabs tournament data</param>
+        private void SaveTournament(IDbConnection connection, TournamentModel tournamentModel)
+        {
+            var tournament = new DynamicParameters();
+            tournament.Add("@TournamentName", tournamentModel.TournamentName);
+            tournament.Add("@EntryFee", tournamentModel.EntryFee);
+            tournament.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+            connection.Execute("dbo.spTournament_Insert", tournament, commandType: CommandType.StoredProcedure);
+            tournamentModel.Id = tournament.Get<int>("@id");
+        }
+
+        /// <summary>
+        /// CONNECTION TO CREATE TOURNAMENT METHOD
+        /// </summary>
+        /// <param name="connection">interface to sql connection</param>
+        /// <param name="tournamentModel">grabs prize data to feed to tournament model</param>
+        private void SaveTournamentPrizes(IDbConnection connection, TournamentModel tournamentModel)
+        {
+            foreach (PrizeModel prizeModel in tournamentModel.Prizes)
+            {
+                var tournament = new DynamicParameters();
+                tournament.Add("@TournamentId", tournamentModel.Id);
+                tournament.Add("@PrizeId", prizeModel.Id);
+                tournament.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+                connection.Execute("dbo.spTournamentPrizes_Insert", tournament, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+        /// CONNECTION TO CREATE TOURNAMENT METHOD
+        /// </summary>
+        /// <param name="connection">interface to sql connection</param>
+        /// <param name="tournamentModel">grabs team entries and feed to tournament model</param>
+        private void SaveTournamentEntries(IDbConnection connection, TournamentModel tournamentModel)
+        {
+            foreach (TeamModel teamModel in tournamentModel.EnteredTeams)
+            {
+                var tournament = new DynamicParameters();
+                tournament.Add("@TournamentId", tournamentModel.Id);
+                tournament.Add("@TeamId", teamModel.Id);
+                connection.Execute("dbo.spTournamentEntries_Insert", tournament, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /////////////////////////SAVING METHODS FOR INSERTING INTO MODELS BOTTOM///////////////////
+        
+        ////////////////////////CALLING STORED PROCEDURES FOR FUNCTIONALITY TOP////////////////////
+
+
+        /// <summary>
+        /// For each Team, the foreach query is run until it selects all people per team, then moves on to next team
+        /// </summary>
+        /// <returns>All Teams with connected team members inside</returns>
+        public List<TeamModel> GetTeam_All()
+        {
+            List<TeamModel> output;
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
+            {
+                output = connection.Query<TeamModel>("dbo.spTeam_GetAll").ToList();           
+                foreach(TeamModel team in output)
+                {
+                    var person = new DynamicParameters();
+                    person.Add("@TeamId", team.Id);
+                    team.TeamMembers = connection.Query<PersonModel>("dbo.spTeamMembers_GetByTeam", person, 
+                        commandType:CommandType.StoredProcedure).ToList();
+                }
+            }
+            return output;
         }
 
         /// <summary>
@@ -100,77 +222,9 @@ namespace TrackerLibrary.DataAccess
             {
                 output = connection.Query<PersonModel>("dbo.spPeople_GetAll").ToList();
             }
-
             return output;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="teamModel"></param>
-        /// <returns></returns>
-        public TeamModel CreateTeam(TeamModel teamModel)
-        {
-            ///using statement for complete garabage collection after method is run
-            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
-            {
-                var team = new DynamicParameters();
-                team.Add("@TeamName", teamModel.TeamName);
-                team.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-                connection.Execute("dbo.spTeam_Insert", team, commandType: CommandType.StoredProcedure);
-                
-                teamModel.Id = team.Get<int>("@id");
-
-                foreach(PersonModel personModel in teamModel.TeamMembers)
-                {
-                    team = new DynamicParameters();
-                    team.Add("@TeamId", teamModel.Id);
-                    team.Add("@PersonId", personModel.Id);
-
-                    connection.Execute("dbo.spTeamMembers_Insert", team, commandType: CommandType.StoredProcedure);
-                }
-                return teamModel;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tournamentModel"></param>
-        /// <returns></returns>
-        public TournamentModel CreateTournament(TournamentModel tournamentModel)
-        {
-            throw new NotImplementedException();
-            ///using statement for complete garabage collection after method is run
-            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
-            {
-
-            }    
-        }
-
-        /// <summary>
-        /// For each Team, the foreach query is run until it selects all people per team, then moves on to next team
-        /// </summary>
-        /// <returns>All Teams with connected team members inside</returns>
-        public List<TeamModel> GetTeam_All()
-        {
-            List<TeamModel> output;
-
-            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
-            {
-                output = connection.Query<TeamModel>("dbo.spTeam_GetAll").ToList();
-                
-                
-                foreach(TeamModel team in output)
-                {
-                    var person = new DynamicParameters();
-                    person.Add("@TeamId", team.Id);
-                    team.TeamMembers = connection.Query<PersonModel>("dbo.spTeamMembers_GetByTeam",person,commandType:CommandType.StoredProcedure).ToList();
-                }
-            }
-
-            return output;
-        }
+        ////////////////////////CALLING STORED PROCEDURES FOR FUNCTIONALITY BOTTOM/////////////////
     }
 }

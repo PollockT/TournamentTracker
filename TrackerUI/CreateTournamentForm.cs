@@ -66,6 +66,11 @@ namespace TrackerUI
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void createPrizeButton_Click(object sender, EventArgs e)
         {
             // TODO - call create prize form
@@ -75,6 +80,10 @@ namespace TrackerUI
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="prizeModel"></param>
         public void PrizeComplete(PrizeModel prizeModel)
         {
             selectedPrizes.Add(prizeModel);
@@ -82,18 +91,32 @@ namespace TrackerUI
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="teamModel"></param>
         public void TeamComplete(TeamModel teamModel)
         {
             selectedTeams.Add(teamModel);
             WireUpLists();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void createNewTeamLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             CreateTeamForm teamForm = new CreateTeamForm(this);
             teamForm.Show();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void removeSelectedTeamButton_Click(object sender, EventArgs e)
         {
             TeamModel team = (TeamModel)tournamentTeamsListBox.SelectedItem;
@@ -105,6 +128,11 @@ namespace TrackerUI
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void removePrizeButton_Click(object sender, EventArgs e)
         {
             PrizeModel prize = (PrizeModel)prizesListBox.SelectedItem;
@@ -114,6 +142,51 @@ namespace TrackerUI
                 //availablePrizeModels.Add(prize);
                 WireUpLists();
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void createTournamentButton_Click(object sender, EventArgs e)
+        {
+            decimal entryFee;
+
+            bool feeAcceptable = decimal.TryParse(entryFeeValue.Text, out entryFee);
+            if (!feeAcceptable)
+            {
+                MessageBox.Show("Please enter a valid Fee.", "Invalid Fee",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+            
+            // Creates tournamentModel
+            TournamentModel tournamentModel = new TournamentModel
+            {
+                TournamentName = tournamentNameValue.Text,
+                EntryFee = entryFee,
+                Prizes = selectedPrizes,
+                EnteredTeams = selectedTeams
+            };
+
+            tournamentModel = GlobalConfig.Connection.CreateTournament(tournamentModel);
+
+
+            // TODO - create tourny entry
+
+            // TODO - collect prizes entries
+
+            // TODO - collect team entries
+
+            // TODO - create matchups
+
+
+
+            // TODO - save
+
         }
     }
 }

@@ -190,11 +190,6 @@ namespace TrackerUI
 
             this.Close();
 
-
-
-           
-            
-            
         }
        
     }

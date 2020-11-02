@@ -13,9 +13,10 @@ namespace TrackerLibrary.DataAccess
         private const string PRIZEFILE = "PrizeModels.csv";
         private const string PERSONFILE = "PersonModels.csv";
         private const string TEAMFILE = "TeamModels.csv";
+        private const string TOURNAMENTFILE = "TournamentModels.csv";
         private const string MATCHUPFILE = "MatchupModels.csv";
         private const string MATCHUPENTRYFILE = "MatchupEntryModels.csv";
-        private const string TOURNAMENTFILE = "TournamentModels.csv";
+        
 
         /// <summary>
         /// Creates Person model to be written to PresonModel.csv, both creating and updating
@@ -88,6 +89,30 @@ namespace TrackerLibrary.DataAccess
             teams.SaveToTeamsFile(TEAMFILE);
 
             return teamModel;
+        }
+
+        public void CreateTournament(TournamentModel tournamentModel)
+        {
+            List<TournamentModel> tournaments = 
+                TOURNAMENTFILE.
+                FullFilePath().
+                LoadFile().
+                ConvertToTournamentModels(TOURNAMENTFILE, PERSONFILE, PRIZEFILE);
+
+            int currentId = 1;
+
+            if(tournaments.Count > 0)
+            {
+                currentId = tournaments.OrderByDescending(x => x.Id).First().Id + 1;
+            }
+
+            tournamentModel.Id = currentId;
+
+            tournaments.Add(tournamentModel);
+
+            tournaments.SaveToTournamentsFile(TOURNAMENTFILE);
+            // TODO - FIX LATER!!!!!!!!!!!!!!!!
+            
         }
 
 
