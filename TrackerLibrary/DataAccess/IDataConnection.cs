@@ -35,7 +35,7 @@ namespace TrackerLibrary.DataAccess
         /// </summary>
         /// <param name="tournamentModel">The tournament record loaded from table</param>
         /// <returns></returns>
-        TournamentModel CreateTournament(TournamentModel tournamentModel);
+        void CreateTournament(TournamentModel tournamentModel);
 
         /// <summary>
         /// Calls Stored Procedure of [dbo].[spPeople_GetAll]

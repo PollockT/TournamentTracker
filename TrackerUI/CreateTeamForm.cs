@@ -93,6 +93,9 @@ namespace TrackerUI
             }
         }
 
+        /// <summary>
+        /// Resets form
+        /// </summary>
         private void ResetMemberForm()
         {
             firstNameValue.Text = "";
@@ -171,6 +174,7 @@ namespace TrackerUI
                 WireUpLists();
             }
         }
+
         /// <summary>
         /// Creates the team with all of the team members selected
         /// </summary>

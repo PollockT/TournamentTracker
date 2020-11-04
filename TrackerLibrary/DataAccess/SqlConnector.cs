@@ -120,7 +120,7 @@ namespace TrackerLibrary.DataAccess
         /// </summary>
         /// <param name="tournamentModel">stores all tournament data</param>
         /// <returns></returns>
-        public TournamentModel CreateTournament(TournamentModel tournamentModel)
+        public void CreateTournament(TournamentModel tournamentModel)
         {            
             ///using statement for complete garabage collection after method is run
             using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString(DB)))
@@ -128,7 +128,7 @@ namespace TrackerLibrary.DataAccess
                 SaveTournament(connection, tournamentModel);
                 SaveTournamentEntries(connection, tournamentModel);
                 SaveTournamentPrizes(connection, tournamentModel);
-                return tournamentModel;
+                
             }            
         }
 

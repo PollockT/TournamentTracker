@@ -50,7 +50,7 @@ namespace TrackerUI
         }
 
         /// <summary>
-        /// 
+        /// Moves selected team to listbox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -67,21 +67,20 @@ namespace TrackerUI
         }
 
         /// <summary>
-        /// 
+        /// Brings up prize form
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void createPrizeButton_Click(object sender, EventArgs e)
         {
-            // TODO - call create prize form
-
+            
             CreatePrizeForm prizeForm = new CreatePrizeForm(this);
             prizeForm.Show();
 
         }
 
         /// <summary>
-        /// 
+        /// Wires up tournament form with prize
         /// </summary>
         /// <param name="prizeModel"></param>
         public void PrizeComplete(PrizeModel prizeModel)
@@ -92,7 +91,7 @@ namespace TrackerUI
         }
 
         /// <summary>
-        /// 
+        /// Wires up tournament form with team
         /// </summary>
         /// <param name="teamModel"></param>
         public void TeamComplete(TeamModel teamModel)
@@ -102,7 +101,7 @@ namespace TrackerUI
         }
 
         /// <summary>
-        /// 
+        /// Link to create new CreateTeamForm
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -113,7 +112,7 @@ namespace TrackerUI
         }
 
         /// <summary>
-        /// 
+        /// removes the SELECTED index'd team from list box
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -145,7 +144,7 @@ namespace TrackerUI
         }
 
         /// <summary>
-        /// 
+        /// Button for creating tournament models
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -171,22 +170,17 @@ namespace TrackerUI
                 Prizes = selectedPrizes,
                 EnteredTeams = selectedTeams
             };
+            // TODO - Wireup
+
+            TournamentLogic.CreateRounds(tournamentModel);
+
 
             tournamentModel = GlobalConfig.Connection.CreateTournament(tournamentModel);
 
-
-            // TODO - create tourny entry
-
-            // TODO - collect prizes entries
-
-            // TODO - collect team entries
-
-            // TODO - create matchups
-
-
-
-            // TODO - save
-
+            
+            // TODO - order list randomly of teams
+            // TODO - Check if team is big enough, if not, add in byes
+            // 2^n 
         }
     }
 }
