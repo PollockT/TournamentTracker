@@ -87,6 +87,11 @@ namespace TrackerLibrary.DataAccess.TextHelpers
             }
         }
 
+        /// <summary>
+        /// Converts prize into readable string, splet with '|'
+        /// </summary>
+        /// <param name="prizes">Prize Model</param>
+        /// <returns></returns>
         private static string ConvertPrizeListToString(List<PrizeModel> prizes)
         {
             string output = "";
@@ -229,6 +234,11 @@ namespace TrackerLibrary.DataAccess.TextHelpers
             File.WriteAllLines(fileName.FullFilePath(), lines);
         }
 
+        /// <summary>
+        /// Converts team into readable string
+        /// </summary>
+        /// <param name="teams">Team Model</param>
+        /// <returns></returns>
         private static string ConvertTeamListToString(List<TeamModel> teams)
         {
             string output = "";
@@ -261,6 +271,11 @@ namespace TrackerLibrary.DataAccess.TextHelpers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Converts the matchup into a readable and parsable string
+        /// </summary>
+        /// <param name="matchups">The selected matchup</param>
+        /// <returns></returns>
         private static string ConvertMatchupListToString(List<MatchupModel> matchups)
         {
             string output = "";
@@ -280,7 +295,12 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
             return output;
         }
-
+        
+        /// <summary>
+        /// Converts selected round into a parsable string
+        /// </summary>
+        /// <param name="rounds">selected round</param>
+        /// <returns></returns>
         private static string ConvertRoundListToString(List<List<MatchupModel>> rounds)
         {
             string output = "";
@@ -317,6 +337,14 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
         //////////////////////TOURNAMENT MODEL FILE CSV/////////////////////////////
 
+        /// <summary>
+        /// builds Tournament model file
+        /// </summary>
+        /// <param name="lines">line record holder</param>
+        /// <param name="teamFileName">TeamModels.csv</param>
+        /// <param name="peopleFileName">PersonModels.csv</param>
+        /// <param name="prizeFileName">PrizeModels.csv</param>
+        /// <returns></returns>
         public static List<TournamentModel> ConvertToTournamentModels(
             this List<string> lines,
             string teamFileName,
@@ -354,6 +382,11 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
         }
 
+        /// <summary>
+        /// Saves data into TournamentFile
+        /// </summary>
+        /// <param name="models">full tournament model</param>
+        /// <param name="fileName">TournamentModels.csv</param>
         public static void SaveToTournamentsFile(this List<TournamentModel> models, string fileName)
         {
             List<string> lines = new List<string>();

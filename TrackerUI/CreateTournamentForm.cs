@@ -175,12 +175,8 @@ namespace TrackerUI
             TournamentLogic.CreateRounds(tournamentModel);
 
 
-            tournamentModel = GlobalConfig.Connection.CreateTournament(tournamentModel);
+            GlobalConfig.Connection.CreateTournament(tournamentModel);
 
-            
-            // TODO - order list randomly of teams
-            // TODO - Check if team is big enough, if not, add in byes
-            // 2^n 
         }
     }
 }
