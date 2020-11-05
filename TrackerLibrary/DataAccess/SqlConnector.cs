@@ -128,6 +128,7 @@ namespace TrackerLibrary.DataAccess
                 SaveTournament(connection, tournamentModel);
                 SaveTournamentEntries(connection, tournamentModel);
                 SaveTournamentPrizes(connection, tournamentModel);
+                SaveTournamentRounds(connection, tournamentModel);
                 
             }            
         }
@@ -138,7 +139,7 @@ namespace TrackerLibrary.DataAccess
 
 
         /// <summary>
-        ///  CONNECTION TO CREATE TOURNAMENT METHOD
+        ///  CONNECTION TO SAVE TOURNAMENT METHOD
         /// </summary>
         /// <param name="connection">interface to sql connection</param>
         /// <param name="tournamentModel">grabs tournament data</param>
@@ -153,7 +154,7 @@ namespace TrackerLibrary.DataAccess
         }
 
         /// <summary>
-        /// CONNECTION TO CREATE TOURNAMENT METHOD
+        /// CONNECTION TO SAVE PRIZES FOR TOURNAMENT
         /// </summary>
         /// <param name="connection">interface to sql connection</param>
         /// <param name="tournamentModel">grabs prize data to feed to tournament model</param>
@@ -170,7 +171,7 @@ namespace TrackerLibrary.DataAccess
         }
 
         /// <summary>
-        /// CONNECTION TO CREATE TOURNAMENT METHOD
+        /// CONNECTION TO SAVE ENTRIES FOR TOURNAMENT
         /// </summary>
         /// <param name="connection">interface to sql connection</param>
         /// <param name="tournamentModel">grabs team entries and feed to tournament model</param>
@@ -185,8 +186,59 @@ namespace TrackerLibrary.DataAccess
             }
         }
 
+        /// <summary>
+        /// CONNECTION TO SAVE ROUNDS FOR TOURNAMENT
+        /// </summary>
+        /// <param name="connection">interface to sql connection</param>
+        /// <param name="tournamentModel">grabs rounds to feed into tournament model</param>
+        private void SaveTournamentRounds(IDbConnection connection, TournamentModel tournamentModel)
+        {
+            foreach (List<MatchupModel> round in tournamentModel.Rounds)
+            {
+                foreach (MatchupModel matchup in round)
+                {
+                    var tournament = new DynamicParameters();
+                    tournament.Add("@TournamentId", tournamentModel.Id);
+                    tournament.Add("@MatchupRound", matchup.MatchupRound);
+                    tournament.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                    connection.Execute("dbo.spMatchups_Insert", tournament, commandType: CommandType.StoredProcedure);
+
+                    matchup.Id = tournament.Get<int>("@id");
+
+                    foreach (MatchupEntryModel entry in matchup.Entries)
+                    {
+                        tournament = new DynamicParameters();
+
+                        tournament.Add("@MatchupId", matchup.Id);
+                        if(entry.ParentMatchup == null)
+                        {
+                            tournament.Add("@ParentMatchupId", null);
+                        }
+                        else
+                        {
+                            tournament.Add("@ParentMatchupId", entry.ParentMatchup.Id);
+                        }
+
+
+                        if(entry.TeamCompeting == null)
+                        {
+                            tournament.Add("@TeamCompetingId", null);
+                        }
+                        else
+                        {
+                            tournament.Add("@TeamCompetingId", entry.TeamCompeting.Id);
+                        }                        
+                        tournament.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                        connection.Execute("dbo.spMatchupEntries_Insert", tournament, commandType: CommandType.StoredProcedure);
+                    }
+                }
+            }
+        }
+
         /////////////////////////SAVING METHODS FOR INSERTING INTO MODELS BOTTOM///////////////////
-        
+
         ////////////////////////CALLING STORED PROCEDURES FOR FUNCTIONALITY TOP////////////////////
 
 
