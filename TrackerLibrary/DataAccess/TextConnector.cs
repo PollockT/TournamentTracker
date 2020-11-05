@@ -91,6 +91,10 @@ namespace TrackerLibrary.DataAccess
             return teamModel;
         }
 
+        /// <summary>
+        /// Creates the tournament file with all the other model data
+        /// </summary>
+        /// <param name="tournamentModel">Tournament Model</param>
         public void CreateTournament(TournamentModel tournamentModel)
         {
             List<TournamentModel> tournaments = 
@@ -117,14 +121,18 @@ namespace TrackerLibrary.DataAccess
 
 
         /// <summary>
-        /// Calls the text file if exsists and gets all records
+        /// Calls the a like SQL stored procedure dbo.spPeople_GetAll
         /// </summary>
-        /// <returns>returns file with records</returns>
+        /// <returns>select * from dbo.People</returns>
         public List<PersonModel> GetPerson_All()
         {
             return PERSONFILE.FullFilePath().LoadFile().ConvertToPersonModels();
         }
 
+        /// <summary>
+        /// Calls the a like SQL stored procedure dbo.spTeam_GetAll
+        /// </summary>
+        /// <returns>select * from dbo.Team</returns>
         public List<TeamModel> GetTeam_All()
         {
             return TEAMFILE.FullFilePath().LoadFile().ConvertToTeamModels(PERSONFILE);
