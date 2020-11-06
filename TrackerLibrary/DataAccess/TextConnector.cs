@@ -112,10 +112,11 @@ namespace TrackerLibrary.DataAccess
 
             tournamentModel.Id = currentId;
 
+            tournamentModel.SaveRoundsToFile(MATCHUPFILE, MATCHUPENTRYFILE);
+
             tournaments.Add(tournamentModel);
 
-            tournaments.SaveToTournamentsFile(TOURNAMENTFILE);
-            // TODO - FIX LATER!!!!!!!!!!!!!!!!
+            tournaments.SaveToTournamentsFile(TOURNAMENTFILE);            
             
         }
 
