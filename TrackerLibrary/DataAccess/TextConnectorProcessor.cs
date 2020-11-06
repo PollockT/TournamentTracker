@@ -588,7 +588,7 @@ namespace TrackerLibrary.DataAccess.TextHelpers
         {
             //Id, TournamentName, EntryFee, (id|id|id - EnteredTeams), (id|id|id - Prizes), (Rounds - id^id^id | id^id^id | id^id^id | 
             List<TournamentModel> output = new List<TournamentModel>();
-            List<TeamModel> teams = GlobalConfig.TEAMFILE.FullFilePath().LoadFile().ConvertToTeamModels(PERSONFILE);
+            List<TeamModel> teams = GlobalConfig.TEAMFILE.FullFilePath().LoadFile().ConvertToTeamModels(GlobalConfig.PERSONFILE);
             List<PrizeModel> prizes = GlobalConfig.PRIZEFILE.FullFilePath().LoadFile().ConvertToPrizeModels();
             List<MatchupModel> matchups = GlobalConfig.MATCHUPFILE.FullFilePath().LoadFile().ConvertToMatchupModels();
 
