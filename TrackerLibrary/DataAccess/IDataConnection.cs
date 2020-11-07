@@ -48,6 +48,6 @@ namespace TrackerLibrary.DataAccess
         /// </summary>
         /// <returns>"@TeamId", team.Id</returns>
         List<TeamModel> GetTeam_All();
-        
+
     }
 }

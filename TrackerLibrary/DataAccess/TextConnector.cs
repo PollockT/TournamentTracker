@@ -16,7 +16,7 @@ namespace TrackerLibrary.DataAccess
         private const string TOURNAMENTFILE = "TournamentModels.csv";
         private const string MATCHUPFILE = "MatchupModels.csv";
         private const string MATCHUPENTRYFILE = "MatchupEntryModels.csv";
-        
+
 
         /// <summary>
         /// Creates Person model to be written to PresonModel.csv, both creating and updating
@@ -29,7 +29,7 @@ namespace TrackerLibrary.DataAccess
 
             int currentId = 1;
 
-            if(person.Count > 0)
+            if (person.Count > 0)
             {
                 currentId = person.OrderByDescending(x => x.Id).First().Id + 1;
             }
@@ -53,7 +53,7 @@ namespace TrackerLibrary.DataAccess
             ///Finds the id of the highest Id, and then adds 1 to make the new current Id
             int currentId = 1;
 
-            if(prizes.Count > 0)
+            if (prizes.Count > 0)
             {
                 currentId = prizes.OrderByDescending(x => x.Id).First().Id + 1;
             }
@@ -79,7 +79,7 @@ namespace TrackerLibrary.DataAccess
             // Find max id
             int currentId = 1;
 
-            if(teams.Count > 0)
+            if (teams.Count > 0)
             {
                 currentId = teams.OrderByDescending(x => x.Id).First().Id + 1;
             }
@@ -97,7 +97,7 @@ namespace TrackerLibrary.DataAccess
         /// <param name="tournamentModel">Tournament Model</param>
         public void CreateTournament(TournamentModel tournamentModel)
         {
-            List<TournamentModel> tournaments = 
+            List<TournamentModel> tournaments =
                 TOURNAMENTFILE.
                 FullFilePath().
                 LoadFile().
@@ -105,7 +105,7 @@ namespace TrackerLibrary.DataAccess
 
             int currentId = 1;
 
-            if(tournaments.Count > 0)
+            if (tournaments.Count > 0)
             {
                 currentId = tournaments.OrderByDescending(x => x.Id).First().Id + 1;
             }
@@ -116,8 +116,8 @@ namespace TrackerLibrary.DataAccess
 
             tournaments.Add(tournamentModel);
 
-            tournaments.SaveToTournamentsFile(TOURNAMENTFILE);            
-            
+            tournaments.SaveToTournamentsFile(TOURNAMENTFILE);
+
         }
 
 
